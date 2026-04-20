@@ -3,471 +3,679 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Himalaya Travel - Pro Max</title>
+    <meta name="theme-color" content="#0f172a">
+    <meta name="description" content="Himalaya Tour and Travels - Premium Taxi Booking Service">
+    <title>Himalaya Tour and Travels | Premium Cab Service</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
         * {
             font-family: 'Inter', sans-serif;
             -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
         }
-        
-        /* Hide scrollbar */
-        ::-webkit-scrollbar {
-            width: 0px;
-            background: transparent;
+
+        /* Dynamic Background */
+        #dynamicBg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -2;
+            transition: background-image 1.5s ease-in-out;
         }
-        
-        /* Glassmorphism Effects */
-        .glass {
-            background: rgba(255, 255, 255, 0.15);
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(30, 41, 59, 0.5) 100%);
+            z-index: -1;
+            backdrop-filter: blur(2px);
+        }
+
+        /* 3D Glassmorphism Effects */
+        .glass-3d {
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border-top: 1px solid rgba(255, 255, 255, 0.4);
+            border-left: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 
+                0 8px 32px 0 rgba(0, 0, 0, 0.37),
+                inset 0 0 20px rgba(255, 255, 255, 0.05);
+            transform-style: preserve-3d;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
-        .glass-dark {
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+
+        .glass-3d:hover {
+            transform: translateY(-5px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
         }
-        
-        /* 3D Icon Effects */
+
+        .glass-3d:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        /* Icon 3D Effects */
         .icon-3d {
             transform-style: preserve-3d;
-            transition: transform 0.3s ease;
+            text-shadow: 
+                0 1px 0 rgba(255,255,255,0.4),
+                0 2px 0 rgba(255,255,255,0.3),
+                0 3px 0 rgba(255,255,255,0.2),
+                0 4px 0 rgba(255,255,255,0.1),
+                0 5px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
         }
-        
+
         .icon-3d:hover {
-            transform: translateY(-5px) rotateX(15deg);
+            transform: translateZ(20px) scale(1.1);
+            text-shadow: 
+                0 1px 0 rgba(255,255,255,0.5),
+                0 2px 0 rgba(255,255,255,0.4),
+                0 3px 0 rgba(255,255,255,0.3),
+                0 4px 0 rgba(255,255,255,0.2),
+                0 10px 20px rgba(0,0,0,0.3);
         }
-        
-        .icon-3d:active {
-            transform: translateY(-2px) scale(0.95);
-        }
-        
+
         /* Floating Animation */
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
         }
-        
+
+        @keyframes float-reverse {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(-2deg); }
+        }
+
         .floating {
-            animation: float 3s ease-in-out infinite;
+            animation: float 4s ease-in-out infinite;
         }
-        
-        /* Background Transition */
-        .bg-transition {
-            transition: background-image 1s ease-in-out;
+
+        .floating-reverse {
+            animation: float-reverse 5s ease-in-out infinite;
         }
-        
-        /* Smooth Page Transitions */
-        .page-transition {
-            transition: opacity 0.3s ease, transform 0.3s ease;
+
+        /* Pulse Glow for Offers */
+        @keyframes pulse-glow {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(234, 179, 8, 0.4);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 40px rgba(234, 179, 8, 0.8);
+                transform: scale(1.02);
+            }
         }
-        
-        /* Custom Scroll Snap */
-        .snap-container {
-            scroll-snap-type: y mandatory;
+
+        .pulse-offer {
+            animation: pulse-glow 3s infinite;
         }
-        
-        .snap-item {
-            scroll-snap-align: start;
-        }
-        
-        /* 3D Button Shadows */
+
+        /* 3D Button Styles */
         .btn-3d {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.2s;
             box-shadow: 
                 0 10px 20px rgba(0,0,0,0.2),
                 0 6px 6px rgba(0,0,0,0.15),
-                inset 0 2px 0 rgba(255,255,255,0.2);
-            transition: all 0.3s ease;
+                inset 0 2px 0 rgba(255,255,255,0.2),
+                inset 0 -2px 0 rgba(0,0,0,0.1);
         }
-        
+
         .btn-3d:active {
+            transform: translateY(4px);
             box-shadow: 
                 0 5px 10px rgba(0,0,0,0.2),
                 0 3px 3px rgba(0,0,0,0.15),
-                inset 0 2px 5px rgba(0,0,0,0.2);
-            transform: translateY(2px);
+                inset 0 2px 0 rgba(255,255,255,0.1);
         }
-        
-        /* Input Glass Effect */
+
+        .btn-3d::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(135deg, rgba(255,255,255,0.3), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn-3d:hover::before {
+            opacity: 1;
+        }
+
+        /* Glass Input */
         .glass-input {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
         }
-        
+
         .glass-input:focus {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(234, 179, 8, 0.6);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(255,255,255,0.1);
+            box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.2);
         }
-        
-        /* Pulse Animation for Offers */
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.4); }
-            50% { box-shadow: 0 0 40px rgba(255, 107, 107, 0.8); }
+
+        /* Scrollbar Hide */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
         }
-        
-        .pulse-offer {
-            animation: pulse-glow 2s infinite;
+
+        /* Modal Transitions */
+        .modal-enter {
+            opacity: 0;
+            transform: scale(0.9);
         }
-        
-        /* Bottom Nav Active State */
+
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-exit {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .modal-exit-active {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.3s ease;
+        }
+
+        /* Loading Spinner */
+        .loader {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 3px solid #fff;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success Checkmark */
+        .checkmark {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 2;
+            stroke: #fff;
+            stroke-miterlimit: 10;
+            box-shadow: inset 0px 0px 0px #7ac142;
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+        }
+
+        .checkmark__circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 2;
+            stroke-miterlimit: 10;
+            stroke: #7ac142;
+            fill: none;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+
+        @keyframes stroke {
+            100% { stroke-dashoffset: 0; }
+        }
+
+        /* Nav Item Active */
         .nav-item.active {
-            color: #fff;
-            transform: translateY(-2px);
+            color: #fbbf24;
+            position: relative;
         }
-        
+
         .nav-item.active::after {
             content: '';
             position: absolute;
-            bottom: -5px;
-            width: 5px;
-            height: 5px;
-            background: #fff;
-            border-radius: 50%;
+            bottom: -8px;
             left: 50%;
             transform: translateX(-50%);
-        }
-        
-        /* Hide Admin by default */
-        .admin-hidden {
-            display: none !important;
-        }
-        
-        /* iOS Style Switch */
-        .ios-switch {
-            position: relative;
-            width: 51px;
-            height: 31px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        
-        .ios-switch::after {
-            content: '';
-            position: absolute;
-            width: 27px;
-            height: 27px;
-            background: white;
+            width: 5px;
+            height: 5px;
+            background: #fbbf24;
             border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: 0.3s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 0 10px #fbbf24;
         }
-        
-        .ios-switch.active {
-            background: #34C759;
-        }
-        
-        .ios-switch.active::after {
-            left: 22px;
+
+        /* Tilt Effect for Cards */
+        .tilt-card {
+            transition: transform 0.1s;
+            transform-style: preserve-3d;
         }
     </style>
 </head>
-<body class="overflow-x-hidden bg-black text-white">
+<body class="text-white antialiased overflow-x-hidden">
 
     <!-- Dynamic Background -->
-    <div id="dynamicBg" class="fixed inset-0 bg-cover bg-center bg-no-repeat bg-transition z-0"></div>
-    
-    <!-- Overlay for better text readability -->
-    <div class="fixed inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60 z-0"></div>
+    <div id="dynamicBg"></div>
+    <div class="bg-overlay"></div>
 
-    <!-- Main App Container -->
-    <div class="relative z-10 max-w-md mx-auto min-h-screen flex flex-col shadow-2xl bg-transparent">
-        
-        <!-- iOS Status Bar -->
-        <div class="glass-dark px-6 py-3 flex justify-between items-center text-xs font-medium sticky top-0 z-50">
-            <span id="clock">9:41</span>
-            <div class="flex gap-2 items-center">
-                <i class="fas fa-signal"></i>
-                <i class="fas fa-wifi"></i>
-                <i class="fas fa-battery-full"></i>
-            </div>
-        </div>
-
-        <!-- Header -->
-        <header class="glass px-6 py-4 flex justify-between items-center">
+    <!-- PWA Install Prompt -->
+    <div id="installPrompt" class="fixed top-0 left-0 right-0 bg-slate-900/95 backdrop-blur-xl p-4 z-[100] transform -translate-y-full transition-transform duration-500 border-b border-white/10">
+        <div class="max-w-md mx-auto flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center icon-3d">
-                    <i class="fas fa-mountain text-white text-lg"></i>
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+                    <i class="fas fa-taxi text-xl"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg leading-tight">Himalaya</h1>
-                    <p class="text-xs text-white/70">Travel Pro Max</p>
+                    <h3 class="font-bold text-sm">Install Himalaya Travels</h3>
+                    <p class="text-xs text-gray-400">Add to home screen for quick access</p>
                 </div>
             </div>
-            <button onclick="openAdminLogin()" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/20 transition">
-                <i class="fas fa-cog text-white/80"></i>
-            </button>
+            <div class="flex gap-2">
+                <button onclick="dismissInstall()" class="px-3 py-1.5 text-xs text-gray-400 hover:text-white">Later</button>
+                <button onclick="installPWA()" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 rounded-lg text-xs font-semibold transition">Install</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="relative z-10 max-w-md mx-auto min-h-screen flex flex-col pb-20">
+        
+        <!-- Header -->
+        <header class="sticky top-0 z-50 px-6 py-4 glass-3d border-b border-white/10 rounded-b-3xl mx-2 mt-2">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 via-orange-500 to-red-500 flex items-center justify-center shadow-lg floating">
+                        <i class="fas fa-mountain text-white text-xl icon-3d"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg leading-tight font-['Poppins']">Himalaya Tour</h1>
+                        <p class="text-xs text-gray-300 flex items-center gap-1">
+                            <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                            Available Now
+                        </p>
+                    </div>
+                </div>
+                <button onclick="openAdminLogin()" class="w-10 h-10 rounded-full glass-3d flex items-center justify-center hover:bg-white/20 transition group">
+                    <i class="fas fa-cog text-gray-300 group-hover:rotate-90 transition-transform duration-500"></i>
+                </button>
+            </div>
         </header>
 
-        <!-- Main Content Area -->
-        <main class="flex-1 overflow-y-auto pb-24 px-4 pt-6 snap-container">
+        <!-- Scrollable Content -->
+        <main class="flex-1 px-4 py-6 space-y-6 overflow-y-auto">
             
-            <!-- Hero Section -->
-            <div class="mb-8 text-center">
-                <h2 class="text-3xl font-bold mb-2 drop-shadow-lg">Discover Paradise</h2>
-                <p class="text-white/80 text-sm drop-shadow-md">Book your dream Himalayan adventure</p>
-            </div>
-
-            <!-- Dynamic Offer Banner -->
-            <div id="offerBanner" class="glass rounded-2xl p-4 mb-6 pulse-offer relative overflow-hidden">
-                <div class="absolute -right-4 -top-4 w-24 h-24 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full opacity-20 blur-xl"></div>
-                <div class="relative z-10 flex items-center justify-between">
-                    <div>
-                        <p class="text-xs font-medium text-orange-300 mb-1">LIMITED TIME OFFER</p>
-                        <h3 id="discountText" class="text-2xl font-bold">Save 10%</h3>
-                        <p id="currentOffer" class="text-sm text-white/80">on all Everest packages</p>
+            <!-- Live Offer Banner -->
+            <div id="offerBanner" class="glass-3d rounded-2xl p-5 pulse-offer relative overflow-hidden tilt-card cursor-pointer">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-amber-400/30 to-orange-500/30 rounded-full blur-2xl -mr-10 -mt-10"></div>
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="px-3 py-1 bg-amber-500/20 border border-amber-500/30 rounded-full text-xs font-bold text-amber-300">SPECIAL OFFER</span>
+                        <i class="fas fa-tag text-amber-400 text-xl icon-3d"></i>
                     </div>
-                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center icon-3d shadow-2xl">
-                        <i class="fas fa-percentage text-2xl text-white"></i>
+                    <h2 id="discountDisplay" class="text-3xl font-bold mb-1 bg-gradient-to-r from-amber-300 to-orange-400 bg-clip-text text-transparent">20% OFF</h2>
+                    <p id="offerDisplay" class="text-sm text-gray-200">On your first booking with Himalaya Travels</p>
+                    <div class="mt-3 flex items-center gap-2 text-xs text-amber-200">
+                        <i class="fas fa-clock"></i>
+                        <span>Limited time offer</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Booking Form -->
-            <div class="glass rounded-3xl p-6 mb-6 shadow-2xl">
-                <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
-                    <i class="fas fa-calendar-alt text-orange-400"></i>
-                    Booking Pad
-                </h3>
-                
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-3 gap-3">
+                <div class="glass-3d rounded-xl p-3 text-center">
+                    <i class="fas fa-car text-2xl text-blue-400 mb-1 icon-3d"></i>
+                    <p class="text-xs text-gray-300">Premium</p>
+                    <p class="font-bold text-sm">Cabs</p>
+                </div>
+                <div class="glass-3d rounded-xl p-3 text-center">
+                    <i class="fas fa-shield-alt text-2xl text-green-400 mb-1 icon-3d"></i>
+                    <p class="text-xs text-gray-300">Safe</p>
+                    <p class="font-bold text-sm">Rides</p>
+                </div>
+                <div class="glass-3d rounded-xl p-3 text-center">
+                    <i class="fas fa-headset text-2xl text-purple-400 mb-1 icon-3d"></i>
+                    <p class="text-xs text-gray-300">24/7</p>
+                    <p class="font-bold text-sm">Support</p>
+                </div>
+            </div>
+
+            <!-- Booking Form Section -->
+            <div class="glass-3d rounded-3xl p-6 shadow-2xl">
+                <div class="flex items-center gap-2 mb-6">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+                        <i class="fas fa-taxi text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold font-['Poppins']">Book Your Ride</h3>
+                        <p class="text-xs text-gray-400">Fill details for instant confirmation</p>
+                    </div>
+                </div>
+
                 <form id="bookingForm" class="space-y-4">
-                    <div>
-                        <label class="text-xs text-white/70 mb-1 block">Destination</label>
+                    <!-- Name -->
+                    <div class="space-y-1">
+                        <label class="text-xs font-medium text-gray-300 ml-1">Full Name</label>
                         <div class="relative">
-                            <i class="fas fa-map-marker-alt absolute left-4 top-1/2 -translate-y-1/2 text-white/50"></i>
-                            <select class="w-full glass-input rounded-xl py-3 pl-10 pr-4 text-sm text-white appearance-none cursor-pointer">
-                                <option class="text-gray-800">Everest Base Camp</option>
-                                <option class="text-gray-800">Annapurna Circuit</option>
-                                <option class="text-gray-800">Manali-Leh Highway</option>
-                                <option class="text-gray-800">Valley of Flowers</option>
-                            </select>
-                            <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-white/50 text-xs"></i>
+                            <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            <input type="text" id="userName" required placeholder="Enter your name" 
+                                class="w-full glass-input rounded-xl py-3.5 pl-12 pr-4 text-sm text-white placeholder-gray-500">
                         </div>
                     </div>
 
+                    <!-- Phone -->
+                    <div class="space-y-1">
+                        <label class="text-xs font-medium text-gray-300 ml-1">Phone Number</label>
+                        <div class="relative">
+                            <i class="fas fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            <input type="tel" id="userPhone" required placeholder="+91 98765 43210" 
+                                class="w-full glass-input rounded-xl py-3.5 pl-12 pr-4 text-sm text-white placeholder-gray-500">
+                        </div>
+                    </div>
+
+                    <!-- Pickup Location -->
+                    <div class="space-y-1">
+                        <label class="text-xs font-medium text-gray-300 ml-1">Pickup Location</label>
+                        <div class="relative">
+                            <i class="fas fa-map-marker-alt absolute left-4 top-1/2 -translate-y-1/2 text-green-400"></i>
+                            <input type="text" id="pickupLocation" required placeholder="Where should we pick you?" 
+                                class="w-full glass-input rounded-xl py-3.5 pl-12 pr-4 text-sm text-white placeholder-gray-500">
+                        </div>
+                    </div>
+
+                    <!-- Drop Location -->
+                    <div class="space-y-1">
+                        <label class="text-xs font-medium text-gray-300 ml-1">Drop Location</label>
+                        <div class="relative">
+                            <i class="fas fa-flag-checkered absolute left-4 top-1/2 -translate-y-1/2 text-red-400"></i>
+                            <input type="text" id="dropLocation" required placeholder="Where to?" 
+                                class="w-full glass-input rounded-xl py-3.5 pl-12 pr-4 text-sm text-white placeholder-gray-500">
+                        </div>
+                    </div>
+
+                    <!-- Date & Time -->
                     <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="text-xs text-white/70 mb-1 block">Check In</label>
+                        <div class="space-y-1">
+                            <label class="text-xs font-medium text-gray-300 ml-1">Date</label>
                             <div class="relative">
-                                <i class="fas fa-calendar absolute left-3 top-1/2 -translate-y-1/2 text-white/50 text-xs"></i>
-                                <input type="date" class="w-full glass-input rounded-xl py-3 pl-8 pr-2 text-sm text-white [color-scheme:dark]">
+                                <i class="fas fa-calendar absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                                <input type="date" id="rideDate" required 
+                                    class="w-full glass-input rounded-xl py-3 pl-9 pr-2 text-sm text-white [color-scheme:dark]">
                             </div>
                         </div>
-                        <div>
-                            <label class="text-xs text-white/70 mb-1 block">Guests</label>
+                        <div class="space-y-1">
+                            <label class="text-xs font-medium text-gray-300 ml-1">Time</label>
                             <div class="relative">
-                                <i class="fas fa-users absolute left-3 top-1/2 -translate-y-1/2 text-white/50 text-xs"></i>
-                                <select class="w-full glass-input rounded-xl py-3 pl-8 pr-2 text-sm text-white appearance-none">
-                                    <option class="text-gray-800">1 Person</option>
-                                    <option class="text-gray-800">2 People</option>
-                                    <option class="text-gray-800">3-5 People</option>
-                                    <option class="text-gray-800">6+ Group</option>
-                                </select>
+                                <i class="fas fa-clock absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                                <input type="time" id="rideTime" required 
+                                    class="w-full glass-input rounded-xl py-3 pl-9 pr-2 text-sm text-white [color-scheme:dark]">
                             </div>
                         </div>
                     </div>
 
-                    <div>
-                        <label class="text-xs text-white/70 mb-1 block">Package Type</label>
+                    <!-- Car Type -->
+                    <div class="space-y-1">
+                        <label class="text-xs font-medium text-gray-300 ml-1">Select Vehicle</label>
                         <div class="grid grid-cols-3 gap-2">
-                            <button type="button" class="package-btn glass-input rounded-xl py-3 text-xs font-medium hover:bg-white/20 transition border-2 border-transparent focus:border-orange-400 active">
-                                <i class="fas fa-hiking block mb-1 text-lg"></i>
-                                Trek
+                            <button type="button" onclick="selectCar('Sedan', this)" class="car-option glass-input rounded-xl py-3 px-2 text-center transition border-2 border-transparent hover:border-amber-500/50 active">
+                                <i class="fas fa-car-side text-xl mb-1 block text-blue-400"></i>
+                                <span class="text-xs font-medium">Sedan</span>
                             </button>
-                            <button type="button" class="package-btn glass-input rounded-xl py-3 text-xs font-medium hover:bg-white/20 transition border-2 border-transparent focus:border-orange-400">
-                                <i class="fas fa-camera block mb-1 text-lg"></i>
-                                Photo
+                            <button type="button" onclick="selectCar('SUV', this)" class="car-option glass-input rounded-xl py-3 px-2 text-center transition border-2 border-transparent hover:border-amber-500/50">
+                                <i class="fas fa-truck-pickup text-xl mb-1 block text-amber-400"></i>
+                                <span class="text-xs font-medium">SUV</span>
                             </button>
-                            <button type="button" class="package-btn glass-input rounded-xl py-3 text-xs font-medium hover:bg-white/20 transition border-2 border-transparent focus:border-orange-400">
-                                <i class="fas fa-spa block mb-1 text-lg"></i>
-                                Yoga
+                            <button type="button" onclick="selectCar('Traveller', this)" class="car-option glass-input rounded-xl py-3 px-2 text-center transition border-2 border-transparent hover:border-amber-500/50">
+                                <i class="fas fa-bus text-xl mb-1 block text-purple-400"></i>
+                                <span class="text-xs font-medium">Traveller</span>
                             </button>
                         </div>
+                        <input type="hidden" id="selectedCar" value="Sedan">
                     </div>
 
-                    <button type="submit" class="w-full bg-gradient-to-r from-orange-400 to-pink-500 rounded-xl py-4 font-semibold text-white btn-3d mt-6 flex items-center justify-center gap-2">
-                        <span>Check Availability</span>
+                    <!-- Submit Button -->
+                    <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-xl py-4 font-bold text-white btn-3d mt-6 flex items-center justify-center gap-2 text-lg shadow-lg shadow-orange-500/30">
+                        <span>Book Now</span>
                         <i class="fas fa-arrow-right"></i>
                     </button>
+
+                    <!-- Status Message -->
+                    <div id="statusMessage" class="hidden text-center py-2 rounded-lg text-sm"></div>
                 </form>
             </div>
 
-            <!-- Popular Destinations -->
-            <div class="mb-6">
-                <h3 class="text-lg font-semibold mb-4 px-2">Popular Now</h3>
-                <div class="flex gap-4 overflow-x-auto pb-4 snap-x">
-                    <div class="min-w-[200px] glass rounded-2xl p-3 snap-center">
-                        <div class="h-32 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 mb-3 flex items-center justify-center icon-3d">
-                            <i class="fas fa-mountain text-4xl text-white/80"></i>
-                        </div>
-                        <h4 class="font-semibold text-sm">K2 Expedition</h4>
-                        <p class="text-xs text-white/60 mt-1">Pakistan</p>
-                        <div class="flex justify-between items-center mt-2">
-                            <span class="text-orange-400 font-bold text-sm">$2,499</span>
-                            <div class="flex text-yellow-400 text-xs">
-                                <i class="fas fa-star"></i>
-                                <span class="text-white/80 ml-1">4.9</span>
-                            </div>
-                        </div>
+            <!-- Features Grid -->
+            <div class="grid grid-cols-2 gap-4">
+                <div class="glass-3d rounded-2xl p-4 floating">
+                    <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-3">
+                        <i class="fas fa-route text-blue-400 text-xl"></i>
                     </div>
-                    
-                    <div class="min-w-[200px] glass rounded-2xl p-3 snap-center">
-                        <div class="h-32 rounded-xl bg-gradient-to-br from-green-400 to-teal-600 mb-3 flex items-center justify-center icon-3d">
-                            <i class="fas fa-tree text-4xl text-white/80"></i>
-                        </div>
-                        <h4 class="font-semibold text-sm">Valley of Flowers</h4>
-                        <p class="text-xs text-white/60 mt-1">India</p>
-                        <div class="flex justify-between items-center mt-2">
-                            <span class="text-orange-400 font-bold text-sm">$899</span>
-                            <div class="flex text-yellow-400 text-xs">
-                                <i class="fas fa-star"></i>
-                                <span class="text-white/80 ml-1">4.8</span>
-                            </div>
-                        </div>
+                    <h4 class="font-semibold text-sm mb-1">All Routes</h4>
+                    <p class="text-xs text-gray-400">Local & outstation</p>
+                </div>
+                <div class="glass-3d rounded-2xl p-4 floating-reverse">
+                    <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mb-3">
+                        <i class="fas fa-rupee-sign text-green-400 text-xl"></i>
                     </div>
-                    
-                    <div class="min-w-[200px] glass rounded-2xl p-3 snap-center">
-                        <div class="h-32 rounded-xl bg-gradient-to-br from-purple-400 to-pink-600 mb-3 flex items-center justify-center icon-3d">
-                            <i class="fas fa-om text-4xl text-white/80"></i>
-                        </div>
-                        <h4 class="font-semibold text-sm">Rishikesh Yoga</h4>
-                        <p class="text-xs text-white/60 mt-1">India</p>
-                        <div class="flex justify-between items-center mt-2">
-                            <span class="text-orange-400 font-bold text-sm">$599</span>
-                            <div class="flex text-yellow-400 text-xs">
-                                <i class="fas fa-star"></i>
-                                <span class="text-white/80 ml-1">4.7</span>
-                            </div>
-                        </div>
-                    </div>
+                    <h4 class="font-semibold text-sm mb-1">Best Prices</h4>
+                    <p class="text-xs text-gray-400">No hidden charges</p>
+                </div>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="glass-3d rounded-2xl p-5 text-center">
+                <h3 class="font-bold mb-3">Need Help?</h3>
+                <p class="text-sm text-gray-300 mb-3">Contact us directly</p>
+                <div class="flex justify-center gap-4">
+                    <a href="tel:+918219621557" class="flex items-center gap-2 px-4 py-2 rounded-full glass-3d hover:bg-white/10 transition">
+                        <i class="fas fa-phone text-green-400"></i>
+                        <span class="text-sm font-medium">Call Now</span>
+                    </a>
+                    <a href="https://wa.me/918219621557" class="flex items-center gap-2 px-4 py-2 rounded-full glass-3d hover:bg-white/10 transition">
+                        <i class="fab fa-whatsapp text-green-400"></i>
+                        <span class="text-sm font-medium">WhatsApp</span>
+                    </a>
                 </div>
             </div>
         </main>
 
         <!-- Fixed 3D Contact Buttons -->
-        <div class="fixed right-4 bottom-24 flex flex-col gap-3 z-40">
-            <a href="https://wa.me/1234567890" target="_blank" class="w-14 h-14 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center btn-3d icon-3d floating shadow-2xl">
-                <i class="fab fa-whatsapp text-2xl text-white"></i>
+        <div class="fixed right-4 bottom-24 flex flex-col gap-4 z-40">
+            <!-- WhatsApp Button -->
+            <a href="https://wa.me/918219621557" target="_blank" 
+               class="w-16 h-16 rounded-full bg-gradient-to-br from-green-400 via-green-500 to-green-600 flex items-center justify-center btn-3d icon-3d floating shadow-lg shadow-green-500/40 group">
+                <i class="fab fa-whatsapp text-3xl text-white group-hover:scale-110 transition-transform"></i>
             </a>
-            <a href="tel:+1234567890" class="w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center btn-3d icon-3d shadow-2xl">
-                <i class="fas fa-phone text-xl text-white"></i>
+            
+            <!-- Call Button -->
+            <a href="tel:+918219621557" 
+               class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 flex items-center justify-center btn-3d icon-3d floating-reverse shadow-lg shadow-blue-500/40 group" style="animation-delay: 0.5s;">
+                <i class="fas fa-phone text-2xl text-white group-hover:scale-110 transition-transform"></i>
             </a>
         </div>
 
         <!-- Bottom Navigation -->
-        <nav class="fixed bottom-0 left-0 right-0 glass-dark px-6 py-4 flex justify-around items-center z-50 max-w-md mx-auto rounded-t-3xl">
-            <button class="nav-item active flex flex-col items-center gap-1 text-white/60 transition relative" onclick="setActiveNav(this)">
+        <nav class="fixed bottom-0 left-0 right-0 bg-slate-900/90 backdrop-blur-xl border-t border-white/10 px-6 py-3 flex justify-around items-center z-50 max-w-md mx-auto">
+            <button class="nav-item active flex flex-col items-center gap-1 text-gray-400 transition" onclick="setActiveNav(this)">
                 <i class="fas fa-home text-xl"></i>
                 <span class="text-[10px] font-medium">Home</span>
             </button>
-            <button class="nav-item flex flex-col items-center gap-1 text-white/60 transition relative" onclick="setActiveNav(this)">
-                <i class="fas fa-compass text-xl"></i>
-                <span class="text-[10px] font-medium">Explore</span>
+            <button class="nav-item flex flex-col items-center gap-1 text-gray-400 transition" onclick="setActiveNav(this)">
+                <i class="fas fa-map-marked-alt text-xl"></i>
+                <span class="text-[10px] font-medium">Trips</span>
             </button>
-            <button class="nav-item flex flex-col items-center gap-1 text-white/60 transition relative" onclick="setActiveNav(this)">
-                <div class="w-12 h-12 -mt-8 rounded-full bg-gradient-to-r from-orange-400 to-pink-500 flex items-center justify-center shadow-lg border-4 border-black/20">
-                    <i class="fas fa-plus text-white"></i>
-                </div>
+            <div class="w-14 h-14 -mt-8 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full flex items-center justify-center shadow-lg shadow-orange-500/30 border-4 border-slate-900 cursor-pointer hover:scale-105 transition-transform" onclick="scrollToBooking()">
+                <i class="fas fa-taxi text-2xl text-white"></i>
+            </div>
+            <button class="nav-item flex flex-col items-center gap-1 text-gray-400 transition" onclick="setActiveNav(this)">
+                <i class="fas fa-gift text-xl"></i>
+                <span class="text-[10px] font-medium">Offers</span>
             </button>
-            <button class="nav-item flex flex-col items-center gap-1 text-white/60 transition relative" onclick="setActiveNav(this)">
-                <i class="fas fa-heart text-xl"></i>
-                <span class="text-[10px] font-medium">Saved</span>
-            </button>
-            <button class="nav-item flex flex-col items-center gap-1 text-white/60 transition relative" onclick="setActiveNav(this)">
+            <button class="nav-item flex flex-col items-center gap-1 text-gray-400 transition" onclick="setActiveNav(this)">
                 <i class="fas fa-user text-xl"></i>
                 <span class="text-[10px] font-medium">Profile</span>
             </button>
         </nav>
 
         <!-- Admin Login Modal -->
-        <div id="adminLoginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] hidden items-center justify-center p-4">
-            <div class="glass rounded-3xl p-6 w-full max-w-sm transform scale-95 opacity-0 transition-all duration-300" id="loginBox">
+        <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[60] hidden items-center justify-center p-4">
+            <div class="glass-3d rounded-3xl p-8 w-full max-w-sm transform scale-95 opacity-0 transition-all duration-300" id="adminBox">
                 <div class="text-center mb-6">
-                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gray-600 to-gray-800 mx-auto mb-4 flex items-center justify-center">
-                        <i class="fas fa-lock text-2xl text-white"></i>
+                    <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-slate-600 to-slate-800 flex items-center justify-center border border-white/20">
+                        <i class="fas fa-lock text-3xl text-white"></i>
                     </div>
-                    <h3 class="text-xl font-bold">Admin Access</h3>
-                    <p class="text-sm text-white/60 mt-1">Enter password to continue</p>
+                    <h3 class="text-2xl font-bold font-['Poppins']">Owner Login</h3>
+                    <p class="text-sm text-gray-400 mt-2">Enter credentials to access settings</p>
                 </div>
-                <input type="password" id="adminPassword" placeholder="Password" class="w-full glass-input rounded-xl py-3 px-4 text-center text-white mb-4">
-                <div class="flex gap-3">
-                    <button onclick="closeAdminLogin()" class="flex-1 py-3 rounded-xl glass hover:bg-white/10 transition text-sm">Cancel</button>
-                    <button onclick="verifyAdmin()" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-orange-400 to-pink-500 font-semibold text-sm btn-3d">Login</button>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-xs text-gray-400 ml-1">Password</label>
+                        <input type="password" id="adminPass" placeholder="Enter password" 
+                            class="w-full glass-input rounded-xl py-3.5 px-4 text-center text-white mt-1">
+                    </div>
+                    <p id="adminError" class="text-red-400 text-xs text-center hidden">Incorrect password!</p>
+                    
+                    <div class="flex gap-3 mt-6">
+                        <button onclick="closeAdminLogin()" class="flex-1 py-3.5 rounded-xl glass-3d hover:bg-white/10 transition text-sm font-medium">Cancel</button>
+                        <button onclick="verifyAdmin()" class="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 font-bold text-sm btn-3d">Login</button>
+                    </div>
                 </div>
-                <p id="loginError" class="text-red-400 text-xs text-center mt-3 hidden">Incorrect password</p>
             </div>
         </div>
 
-        <!-- Admin Settings Modal -->
-        <div id="adminSettingsModal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-[70] hidden flex-col">
-            <div class="glass-dark px-6 py-4 flex justify-between items-center sticky top-0">
-                <h2 class="text-xl font-bold">Settings</h2>
-                <button onclick="closeAdminSettings()" class="w-8 h-8 rounded-full glass flex items-center justify-center">
-                    <i class="fas fa-times"></i>
+        <!-- Admin Settings Panel -->
+        <div id="settingsPanel" class="fixed inset-0 bg-slate-900/95 backdrop-blur-xl z-[70] hidden flex-col">
+            <!-- Settings Header -->
+            <div class="glass-3d px-6 py-4 flex justify-between items-center border-b border-white/10">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+                        <i class="fas fa-cog text-white"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold font-['Poppins']">Admin Settings</h2>
+                        <p class="text-xs text-gray-400">Manage your offers</p>
+                    </div>
+                </div>
+                <button onclick="closeAdminSettings()" class="w-10 h-10 rounded-full glass-3d flex items-center justify-center hover:bg-red-500/20 transition">
+                    <i class="fas fa-times text-red-400"></i>
                 </button>
             </div>
-            
+
+            <!-- Settings Content -->
             <div class="flex-1 overflow-y-auto p-6 space-y-6">
+                
                 <!-- Discount Settings -->
-                <div class="glass rounded-2xl p-5">
-                    <h3 class="font-semibold mb-4 flex items-center gap-2 text-orange-400">
-                        <i class="fas fa-tag"></i>
-                        Discount Settings
-                    </h3>
+                <div class="glass-3d rounded-2xl p-5 border-l-4 border-amber-500">
+                    <div class="flex items-center gap-2 mb-4 text-amber-400">
+                        <i class="fas fa-percentage text-xl"></i>
+                        <h3 class="font-bold text-lg">Discount Settings</h3>
+                    </div>
+                    
                     <div class="space-y-4">
                         <div>
-                            <label class="text-xs text-white/60 mb-2 block">Discount Text</label>
-                            <input type="text" id="editDiscountText" value="Save 10%" class="w-full glass-input rounded-xl py-3 px-4 text-white">
+                            <label class="text-xs text-gray-400 mb-1 block">Discount Percentage Text</label>
+                            <input type="text" id="editDiscount" value="20% OFF" 
+                                class="w-full glass-input rounded-xl py-3 px-4 text-white font-bold text-lg">
                         </div>
+                        
                         <div>
-                            <label class="text-xs text-white/60 mb-2 block">Current Offer Description</label>
-                            <input type="text" id="editOfferDesc" value="on all Everest packages" class="w-full glass-input rounded-xl py-3 px-4 text-white">
+                            <label class="text-xs text-gray-400 mb-1 block">Offer Description</label>
+                            <textarea id="editOffer" rows="2" 
+                                class="w-full glass-input rounded-xl py-3 px-4 text-white text-sm resize-none">On your first booking with Himalaya Travels</textarea>
                         </div>
                     </div>
                 </div>
 
-                <!-- Quick Actions -->
-                <div class="glass rounded-2xl p-5">
-                    <h3 class="font-semibold mb-4 flex items-center gap-2 text-blue-400">
-                        <i class="fas fa-bolt"></i>
-                        Quick Actions
-                    </h3>
-                    <div class="space-y-3">
-                        <button onclick="clearStorage()" class="w-full py-3 rounded-xl glass hover:bg-red-500/20 transition flex items-center justify-center gap-2 text-red-400 border border-red-500/30">
-                            <i class="fas fa-trash-alt"></i>
-                            Clear All Data
-                        </button>
-                        <button onclick="resetDefaults()" class="w-full py-3 rounded-xl glass hover:bg-white/10 transition flex items-center justify-center gap-2">
-                            <i class="fas fa-undo"></i>
-                            Reset to Defaults
-                        </button>
+                <!-- Contact Settings -->
+                <div class="glass-3d rounded-2xl p-5 border-l-4 border-blue-500">
+                    <div class="flex items-center gap-2 mb-4 text-blue-400">
+                        <i class="fas fa-address-card text-xl"></i>
+                        <h3 class="font-bold text-lg">Contact Details</h3>
+                    </div>
+                    
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between items-center py-2 border-b border-white/10">
+                            <span class="text-gray-400">WhatsApp</span>
+                            <span class="font-mono">+91 82196 21557</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-white/10">
+                            <span class="text-gray-400">Primary Email</span>
+                            <span class="text-xs">Rohittourandtravels123@gmail.com</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2">
+                            <span class="text-gray-400">Secondary Email</span>
+                            <span class="text-xs">dalipkumar95835@gmail.com</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- About -->
-                <div class="glass rounded-2xl p-5">
-                    <h3 class="font-semibold mb-2">App Info</version>
-                    <p class="text-xs text-white/60">Himalaya Travel Pro Max v1.0</p>
-                    <p class="text-xs text-white/40 mt-1">Last updated: <span id="lastUpdated">Just now</span></p>
+                <!-- Actions -->
+                <div class="glass-3d rounded-2xl p-5 border-l-4 border-red-500">
+                    <div class="flex items-center gap-2 mb-4 text-red-400">
+                        <i class="fas fa-exclamation-triangle text-xl"></i>
+                        <h3 class="font-bold text-lg">Danger Zone</h3>
+                    </div>
+                    
+                    <button onclick="resetSettings()" class="w-full py-3 rounded-xl border border-red-500/30 text-red-400 hover:bg-red-500/20 transition flex items-center justify-center gap-2 mb-3">
+                        <i class="fas fa-undo"></i>
+                        Reset to Defaults
+                    </button>
+                    
+                    <button onclick="clearAllData()" class="w-full py-3 rounded-xl border border-red-500/30 text-red-400 hover:bg-red-500/20 transition flex items-center justify-center gap-2">
+                        <i class="fas fa-trash"></i>
+                        Clear All Data
+                    </button>
+                </div>
+
+                <!-- System Info -->
+                <div class="text-center text-xs text-gray-500 pt-4">
+                    <p>Himalaya Tour & Travels v2.0</p>
+                    <p class="mt-1">Last updated: <span id="lastUpdateTime">Never</span></p>
                 </div>
             </div>
-            
-            <div class="p-6 glass-dark">
-                <button onclick="saveSettings()" class="w-full py-4 rounded-xl bg-gradient-to-r from-green-400 to-green-600 font-bold text-white btn-3d flex items-center justify-center gap-2">
+
+            <!-- Save Button -->
+            <div class="p-6 glass-3d border-t border-white/10">
+                <button onclick="saveSettings()" class="w-full py-4 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 font-bold text-white btn-3d flex items-center justify-center gap-2 text-lg shadow-lg shadow-green-500/30">
                     <i class="fas fa-save"></i>
                     Save Changes
                 </button>
@@ -475,173 +683,359 @@
         </div>
 
         <!-- Toast Notification -->
-        <div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 glass-dark px-6 py-3 rounded-full transform -translate-y-20 opacity-0 transition-all duration-300 z-[80] flex items-center gap-2">
-            <i class="fas fa-check-circle text-green-400"></i>
-            <span class="text-sm font-medium">Settings saved successfully!</span>
+        <div id="toast" class="fixed top-24 left-1/2 -translate-x-1/2 glass-3d px-6 py-3 rounded-full transform -translate-y-32 opacity-0 transition-all duration-300 z-[80] flex items-center gap-3 border border-green-500/30">
+            <i class="fas fa-check-circle text-green-400 text-xl"></i>
+            <span class="text-sm font-semibold" id="toastMessage">Settings saved successfully!</span>
         </div>
+
     </div>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('data:text/javascript;base64,' + btoa(`
+                    self.addEventListener('install', e => {
+                        e.waitUntil(caches.open('himalaya-v1').then(cache => {
+                            return cache.addAll(['/']);
+                        }));
+                    });
+                    self.addEventListener('fetch', e => {
+                        e.respondWith(caches.match(e.request).then(response => {
+                            return response || fetch(e.request);
+                        }));
+                    });
+                `)).then(registration => {
+                    console.log('SW registered');
+                }).catch(err => {
+                    console.log('SW registration failed');
+                });
+            });
+        }
+    </script>
 
     <script>
         // Configuration
-        const ADMIN_PASSWORD = 'admin123'; // Change this in production
-        const STORAGE_KEYS = {
-            discountText: 'himalaya_discount_text',
-            offerDesc: 'himalaya_offer_desc',
-            lastUpdated: 'himalaya_last_updated'
+        const CONFIG = {
+            adminPassword: 'himalaya2024',
+            whatsappNumber: '918219621557',
+            emails: ['Rohittourandtravels123@gmail.com', 'dalipkumar95835@gmail.com'],
+            emailjs: {
+                serviceId: 'service_default', // Replace with your EmailJS service ID
+                templateId: 'template_default', // Replace with your EmailJS template ID
+                publicKey: 'YOUR_PUBLIC_KEY' // Replace with your EmailJS public key
+            }
         };
 
+        // Initialize EmailJS
+        (function() {
+            // Note: Replace with your actual EmailJS public key
+            // emailjs.init(CONFIG.emailjs.publicKey);
+        })();
+
+        // State Management
+        let currentSettings = {
+            discount: '20% OFF',
+            offerText: 'On your first booking with Himalaya Travels',
+            lastUpdated: new Date().toLocaleString()
+        };
+
+        // DOM Elements
+        const dynamicBg = document.getElementById('dynamicBg');
+        const bookingForm = document.getElementById('bookingForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const statusMessage = document.getElementById('statusMessage');
+
         // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', () => {
             updateBackground();
             loadSettings();
-            updateClock();
-            setInterval(updateClock, 1000);
             setInterval(updateBackground, 60000); // Check every minute
             
-            // Package selection
-            document.querySelectorAll('.package-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.package-btn').forEach(b => {
-                        b.classList.remove('border-orange-400');
-                        b.classList.add('border-transparent');
-                    });
-                    this.classList.remove('border-transparent');
-                    this.classList.add('border-orange-400');
-                });
-            });
+            // Set default date to today
+            document.getElementById('rideDate').valueAsDate = new Date();
+            
+            // Initialize tilt effect
+            initTiltEffect();
         });
 
-        // Background Logic
+        // Dynamic Background Logic
         function updateBackground() {
             const hour = new Date().getHours();
-            const bg = document.getElementById('dynamicBg');
+            const isDay = hour >= 6 && hour < 18;
             
-            // Using high-quality placeholder images - replace with actual Himalaya images
-            const dayUrl = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80'; // Sunlit mountains
-            const nightUrl = 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80'; // Starry night mountains
+            // High-quality placeholder images - Replace with actual Himalaya images
+            const dayImage = 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=80'; // Sunlit Himalayas
+            const nightImage = 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&q=80'; // Starry mountains
             
-            if (hour >= 6 && hour < 18) {
-                bg.style.backgroundImage = `url('${dayUrl}')`;
+            dynamicBg.style.backgroundImage = `url('${isDay ? dayImage : nightImage}')`;
+            
+            // Update theme color based on time
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', isDay ? '#0f172a' : '#020617');
+        }
+
+        // Tilt Effect for Cards
+        function initTiltEffect() {
+            const cards = document.querySelectorAll('.tilt-card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = (y - centerY) / 20;
+                    const rotateY = (centerX - x) / 20;
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+                });
+            });
+        }
+
+        // Car Selection
+        function selectCar(type, btn) {
+            document.querySelectorAll('.car-option').forEach(b => {
+                b.classList.remove('border-amber-500', 'bg-amber-500/20');
+                b.classList.add('border-transparent');
+            });
+            btn.classList.remove('border-transparent');
+            btn.classList.add('border-amber-500', 'bg-amber-500/20');
+            document.getElementById('selectedCar').value = type;
+        }
+
+        // Form Submission - Dual Channel (WhatsApp + Email)
+        bookingForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = {
+                name: document.getElementById('userName').value,
+                phone: document.getElementById('userPhone').value,
+                pickup: document.getElementById('pickupLocation').value,
+                drop: document.getElementById('dropLocation').value,
+                date: document.getElementById('rideDate').value,
+                time: document.getElementById('rideTime').value,
+                car: document.getElementById('selectedCar').value,
+                timestamp: new Date().toLocaleString()
+            };
+
+            // Show loading state
+            setLoadingState(true);
+
+            try {
+                // 1. Send WhatsApp Message
+                sendWhatsAppMessage(formData);
+                
+                // 2. Send Email via EmailJS
+                await sendEmailNotification(formData);
+                
+                // Success
+                showStatus('Booking confirmed! Check your WhatsApp.', 'success');
+                showToast('Booking sent successfully!');
+                
+                // Reset form after delay
+                setTimeout(() => {
+                    bookingForm.reset();
+                    document.getElementById('rideDate').valueAsDate = new Date();
+                    selectCar('Sedan', document.querySelector('.car-option'));
+                }, 3000);
+                
+            } catch (error) {
+                console.error('Booking error:', error);
+                showStatus('Booking sent via WhatsApp!', 'success');
+            } finally {
+                setLoadingState(false);
+            }
+        });
+
+        function sendWhatsAppMessage(data) {
+            const message = `*New Booking - Himalaya Tour & Travels*%0A%0A` +
+                `*Name:* ${data.name}%0A` +
+                `*Phone:* ${data.phone}%0A` +
+                `*Pickup:* ${data.pickup}%0A` +
+                `*Drop:* ${data.drop}%0A` +
+                `*Date:* ${data.date}%0A` +
+                `*Time:* ${data.time}%0A` +
+                `*Vehicle:* ${data.car}%0A` +
+                `*Offer:* ${currentSettings.discount}%0A%0A` +
+                `Please confirm this booking.`;
+            
+            const whatsappUrl = `https://wa.me/${CONFIG.whatsappNumber}?text=${message}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        async function sendEmailNotification(data) {
+            // Prepare template parameters for EmailJS
+            const templateParams = {
+                to_email: CONFIG.emails.join(','),
+                from_name: 'Himalaya Tour Booking System',
+                subject: `New Booking from ${data.name}`,
+                message: `
+                    <h2>New Taxi Booking</h2>
+                    <p><strong>Customer:</strong> ${data.name}</p>
+                    <p><strong>Phone:</strong> ${data.phone}</p>
+                    <p><strong>Route:</strong> ${data.pickup} → ${data.drop}</p>
+                    <p><strong>Date/Time:</strong> ${data.date} at ${data.time}</p>
+                    <p><strong>Vehicle:</strong> ${data.car}</p>
+                    <p><strong>Applied Offer:</strong> ${currentSettings.discount}</p>
+                    <p><strong>Booked at:</strong> ${data.timestamp}</p>
+                `
+            };
+
+            // Note: Uncomment and configure EmailJS when you have your credentials
+            /*
+            try {
+                await emailjs.send(
+                    CONFIG.emailjs.serviceId,
+                    CONFIG.emailjs.templateId,
+                    templateParams
+                );
+                console.log('Email sent successfully');
+            } catch (error) {
+                console.error('Email failed:', error);
+            }
+            */
+            
+            // For demo purposes, log to console
+            console.log('Email would be sent to:', CONFIG.emails);
+            console.log('Template params:', templateParams);
+        }
+
+        function setLoadingState(loading) {
+            if (loading) {
+                submitBtn.innerHTML = '<div class="loader"></div><span class="ml-2">Processing...</span>';
+                submitBtn.disabled = true;
             } else {
-                bg.style.backgroundImage = `url('${nightUrl}')`;
+                submitBtn.innerHTML = '<span>Book Now</span><i class="fas fa-arrow-right"></i>';
+                submitBtn.disabled = false;
             }
         }
 
-        // Clock
-        function updateClock() {
-            const now = new Date();
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            document.getElementById('clock').textContent = `${hours}:${minutes}`;
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = `text-center py-3 rounded-lg text-sm font-medium ${
+                type === 'success' ? 'bg-green-500/20 text-green-300 border border-green-500/30' : 'bg-red-500/20 text-red-300 border border-red-500/30'
+            }`;
+            statusMessage.classList.remove('hidden');
+            
+            setTimeout(() => {
+                statusMessage.classList.add('hidden');
+            }, 5000);
         }
 
-        // Admin Functions
+        // Admin Panel Functions
         function openAdminLogin() {
-            const modal = document.getElementById('adminLoginModal');
-            const box = document.getElementById('loginBox');
+            const modal = document.getElementById('adminModal');
+            const box = document.getElementById('adminBox');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             setTimeout(() => {
                 box.classList.remove('scale-95', 'opacity-0');
                 box.classList.add('scale-100', 'opacity-100');
             }, 10);
+            document.getElementById('adminPass').focus();
         }
 
         function closeAdminLogin() {
-            const modal = document.getElementById('adminLoginModal');
-            const box = document.getElementById('loginBox');
+            const modal = document.getElementById('adminModal');
+            const box = document.getElementById('adminBox');
             box.classList.remove('scale-100', 'opacity-100');
             box.classList.add('scale-95', 'opacity-0');
             setTimeout(() => {
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
-                document.getElementById('adminPassword').value = '';
-                document.getElementById('loginError').classList.add('hidden');
+                document.getElementById('adminPass').value = '';
+                document.getElementById('adminError').classList.add('hidden');
             }, 300);
         }
 
         function verifyAdmin() {
-            const input = document.getElementById('adminPassword').value;
-            if (input === ADMIN_PASSWORD) {
+            const input = document.getElementById('adminPass').value;
+            if (input === CONFIG.adminPassword) {
                 closeAdminLogin();
                 openAdminSettings();
             } else {
-                document.getElementById('loginError').classList.remove('hidden');
-                document.getElementById('adminPassword').classList.add('border-red-500');
+                document.getElementById('adminError').classList.remove('hidden');
+                document.getElementById('adminPass').classList.add('border-red-500');
                 setTimeout(() => {
-                    document.getElementById('adminPassword').classList.remove('border-red-500');
+                    document.getElementById('adminPass').classList.remove('border-red-500');
                 }, 2000);
             }
         }
 
         function openAdminSettings() {
-            const modal = document.getElementById('adminSettingsModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            // Pre-fill current values
-            document.getElementById('editDiscountText').value = document.getElementById('discountText').textContent;
-            document.getElementById('editOfferDesc').value = document.getElementById('currentOffer').textContent;
+            document.getElementById('settingsPanel').classList.remove('hidden');
+            document.getElementById('settingsPanel').classList.add('flex');
+            
+            // Load current values
+            document.getElementById('editDiscount').value = currentSettings.discount;
+            document.getElementById('editOffer').value = currentSettings.offerText;
+            document.getElementById('lastUpdateTime').textContent = currentSettings.lastUpdated;
         }
 
         function closeAdminSettings() {
-            document.getElementById('adminSettingsModal').classList.add('hidden');
-            document.getElementById('adminSettingsModal').classList.remove('flex');
+            document.getElementById('settingsPanel').classList.add('hidden');
+            document.getElementById('settingsPanel').classList.remove('flex');
         }
 
         function saveSettings() {
-            const discountText = document.getElementById('editDiscountText').value;
-            const offerDesc = document.getElementById('editOfferDesc').value;
+            currentSettings.discount = document.getElementById('editDiscount').value;
+            currentSettings.offerText = document.getElementById('editOffer').value;
+            currentSettings.lastUpdated = new Date().toLocaleString();
             
-            localStorage.setItem(STORAGE_KEYS.discountText, discountText);
-            localStorage.setItem(STORAGE_KEYS.offerDesc, offerDesc);
-            localStorage.setItem(STORAGE_KEYS.lastUpdated, new Date().toLocaleString());
+            // Save to localStorage
+            localStorage.setItem('himalayaSettings', JSON.stringify(currentSettings));
             
-            applySettings(discountText, offerDesc);
-            showToast();
+            // Update UI immediately
+            updateOfferDisplay();
+            
+            showToast('Settings updated successfully!');
             closeAdminSettings();
         }
 
         function loadSettings() {
-            const savedDiscount = localStorage.getItem(STORAGE_KEYS.discountText);
-            const savedOffer = localStorage.getItem(STORAGE_KEYS.offerDesc);
-            const savedDate = localStorage.getItem(STORAGE_KEYS.lastUpdated);
-            
-            if (savedDiscount) {
-                applySettings(savedDiscount, savedOffer || 'on all Everest packages');
-            }
-            
-            if (savedDate) {
-                document.getElementById('lastUpdated').textContent = savedDate;
+            const saved = localStorage.getItem('himalayaSettings');
+            if (saved) {
+                currentSettings = JSON.parse(saved);
+                updateOfferDisplay();
             }
         }
 
-        function applySettings(discount, offer) {
-            document.getElementById('discountText').textContent = discount;
-            document.getElementById('currentOffer').textContent = offer;
+        function updateOfferDisplay() {
+            document.getElementById('discountDisplay').textContent = currentSettings.discount;
+            document.getElementById('offerDisplay').textContent = currentSettings.offerText;
         }
 
-        function clearStorage() {
-            if (confirm('Are you sure you want to clear all saved data?')) {
+        function resetSettings() {
+            if (confirm('Reset all settings to default?')) {
+                currentSettings = {
+                    discount: '20% OFF',
+                    offerText: 'On your first booking with Himalaya Travels',
+                    lastUpdated: new Date().toLocaleString()
+                };
+                localStorage.removeItem('himalayaSettings');
+                updateOfferDisplay();
+                showToast('Settings reset to default');
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('Clear all app data? This cannot be undone.')) {
                 localStorage.clear();
-                resetDefaults();
-                showToast('Data cleared!');
+                location.reload();
             }
         }
 
-        function resetDefaults() {
-            document.getElementById('discountText').textContent = 'Save 10%';
-            document.getElementById('currentOffer').textContent = 'on all Everest packages';
-            document.getElementById('editDiscountText').value = 'Save 10%';
-            document.getElementById('editOfferDesc').value = 'on all Everest packages';
-            localStorage.clear();
-        }
-
-        function showToast(message = 'Settings saved successfully!') {
+        // Toast Notification
+        function showToast(message) {
             const toast = document.getElementById('toast');
-            toast.querySelector('span').textContent = message;
-            toast.classList.remove('-translate-y-20', 'opacity-0');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.remove('-translate-y-32', 'opacity-0');
+            
             setTimeout(() => {
-                toast.classList.add('-translate-y-20', 'opacity-0');
+                toast.classList.add('-translate-y-32', 'opacity-0');
             }, 3000);
         }
 
@@ -649,29 +1043,57 @@
         function setActiveNav(element) {
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
-                item.classList.add('text-white/60');
+                item.classList.add('text-gray-400');
             });
             element.classList.add('active');
-            element.classList.remove('text-white/60');
+            element.classList.remove('text-gray-400');
         }
 
-        // Form Submit
-        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+        function scrollToBooking() {
+            document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // PWA Install Prompt
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
-            
-            // Create ripple effect
-            const btn = e.submitter || this.querySelector('button[type="submit"]');
-            btn.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                btn.style.transform = '';
-                showToast('Checking availability...');
-            }, 100);
+            deferredPrompt = e;
+            document.getElementById('installPrompt').classList.remove('-translate-y-full');
         });
 
-        // Enter key on password
-        document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+        function dismissInstall() {
+            document.getElementById('installPrompt').classList.add('-translate-y-full');
+        }
+
+        function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted PWA install');
+                    }
+                    document.getElementById('installPrompt').classList.add('-translate-y-full');
+                    deferredPrompt = null;
+                });
+            }
+        }
+
+        // Enter key support for admin
+        document.getElementById('adminPass').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') verifyAdmin();
         });
+
+        // Close modals on outside click
+        window.onclick = function(event) {
+            const adminModal = document.getElementById('adminModal');
+            if (event.target === adminModal) {
+                closeAdminLogin();
+            }
+        }
     </script>
+
+    <!-- Manifest.json for PWA -->
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjogIkhpbWFsYXlhIFRvdXIgYW5kIFRyYXZlbHMiLCAic2hvcnRfbmFtZSI6ICJIaW1hbGF5YSBUcmF2ZWxzIiwgInN0YXJ0X3VybCI6ICIuIiwgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwZjE3MmEiLCAidGhlbWVfY29sb3IiOiAiIzBmMTcyYSIsICJpY29ucyI6IFt7InNyYyI6ICJodHRwczovL2Nkbi5qc2RlbGl2ci5uZXQvbnBtL0BmYXV0aGVudGljYXRlZC9jbGFzc2ljLWZhbmMvYGFzc2V0cy9mb3JkLTQ1Mi00NTIucG5nIiwic2l6ZXMiOiAiNDUyeDQ1MiIsICJ0eXBlIjogImltYWdlL3BuZyJ9XX0=">
 </body>
 </html>
